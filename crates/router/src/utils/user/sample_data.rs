@@ -214,7 +214,7 @@ pub async fn generate_sample_data(
 
         // After some set of payments sample data will have a failed attempt
         let is_failed_payment =
-            (random_array.get(num - 1).unwrap_or(&0) % failure_after_attempts) == 0;
+            random_array.get(num - 1).unwrap_or(&0).is_multiple_of(failure_after_attempts);
 
         let payment_intent = PaymentIntent {
             payment_id: payment_id.clone(),
