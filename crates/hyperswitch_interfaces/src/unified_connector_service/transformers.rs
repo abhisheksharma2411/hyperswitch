@@ -1333,8 +1333,21 @@ impl ErrorSwitch<ConnectorError> for UnifiedConnectorServiceError {
                     error_body.to_string(),
                 )))
             }
-            // Connector errors with status code → ResponseHandlingFailed
-            Self::ConnectorError(_) => ConnectorError::ResponseHandlingFailed,
+            // Connector errors — serialize the details into ProcessingStepFailed so
+            // downstream handlers (to_payment_failed_response) can surface them instead
+            // of producing a bare InternalServerError.
+            Self::ConnectorError(inner) => {
+                let error_body = serde_json::json!({
+                    "code": inner.code,
+                    "message": inner.message,
+                    "status_code": inner.status_code,
+                    "reason": inner.reason,
+                    "connector": inner.connector,
+                });
+                ConnectorError::ProcessingStepFailed(Some(bytes::Bytes::from(
+                    error_body.to_string(),
+                )))
+            }
             // Connection/availability errors → ResponseHandlingFailed
             Self::ConnectionError(_) => ConnectorError::ResponseHandlingFailed,
             // Request encoding errors

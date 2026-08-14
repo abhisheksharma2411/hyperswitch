@@ -3305,15 +3305,68 @@ where
                     ),
                 }
 
-                let error_body = serde_json::json!({
-                    "error": error.to_string(),
-                    "error_type": "ucs_call_failed"
-                });
-                (
-                    error.current_context().http_status(),
-                    Some(error_body),
-                    Err(error),
-                )
+                let status_code = error.current_context().http_status();
+
+                // Client errors (4xx) from UCS that DON'T already have a correct
+                // ErrorSwitch<ConnectorError> mapping should be intercepted here.
+                // MissingRequiredField(s) already maps correctly via ErrorSwitch
+                // to ConnectorError::MissingRequiredField → IR_04, so skip those.
+                let is_interceptable_client_error = (400..500).contains(&status_code)
+                    && !matches!(
+                        error.current_context(),
+                        UnifiedConnectorServiceError::MissingRequiredField { .. }
+                            | UnifiedConnectorServiceError::MissingRequiredFields { .. }
+                    );
+
+                if is_interceptable_client_error {
+                    // Convert to Ok(RouterData) with Err(ErrorResponse) so these surface
+                    // as proper 4xx API responses instead of being funnelled through the
+                    // ConnectorError path which turns everything into CE_01/HE_00.
+                    let error_message = match error.current_context() {
+                        UnifiedConnectorServiceError::TonicStatus { message, .. } => {
+                            message.clone()
+                        }
+                        UnifiedConnectorServiceError::InvalidDataFormat { field_name } => {
+                            format!("Invalid data format: {field_name}")
+                        }
+                        other => other.to_string(),
+                    };
+
+                    let mut router_data = router_data_clone;
+                    router_data.response = Err(ErrorResponse {
+                        code: format!("UCS_{status_code}"),
+                        message: error_message.clone(),
+                        reason: Some(error_message),
+                        status_code,
+                        attempt_status: None,
+                        connector_transaction_id: None,
+                        connector_response_reference_id: None,
+                        network_decline_code: None,
+                        network_advice_code: None,
+                        network_error_message: None,
+                        connector_metadata: None,
+                    });
+                    router_data.connector_http_status_code = Some(status_code);
+
+                    let error_body = serde_json::json!({
+                        "error": error.to_string(),
+                        "error_type": "ucs_client_error"
+                    });
+
+                    (
+                        status_code,
+                        Some(error_body),
+                        Ok((router_data, FlowOutput::default())),
+                    )
+                } else {
+                    // Server errors (5xx) and correctly-mapped client errors propagate
+                    // as Err through ErrorSwitch<ConnectorError> → to_payment_failed_response
+                    let error_body = serde_json::json!({
+                        "error": error.to_string(),
+                        "error_type": "ucs_call_failed"
+                    });
+                    (status_code, Some(error_body), Err(error))
+                }
             }
         }
     };
