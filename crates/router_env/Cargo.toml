@@ -33,7 +33,7 @@ tokio = { version = "1.48.0" }
 tracing = { workspace = true }
 actix-web = { version = "4.11.0", optional = true }
 tracing-actix-web = { version = "0.7.18", features = ["opentelemetry_0_27", "uuid_v7"], optional = true }
-tracing-appender = { version = "0.2.3" }
+tracing-appender = { version = "0.2.5" }
 tracing-attributes = "0.1.28"
 tracing-opentelemetry = { version = "0.28.0", default-features = false }
 tracing-subscriber = { version = "0.3.19", default-features = true, features = ["env-filter", "json", "registry"] }
