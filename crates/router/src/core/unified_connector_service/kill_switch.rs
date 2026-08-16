@@ -447,7 +447,7 @@ mod tests {
             ),
             (
                 UnifiedConnectorServiceError::MissingRequiredField {
-                    field_name: "payment_method_data",
+                    field_name: "payment_method_data".into(),
                 },
                 UcsKillSwitchReason::HyperswitchRequestInvalid,
             ),

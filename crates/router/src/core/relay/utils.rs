@@ -44,7 +44,7 @@ pub async fn construct_relay_refund_router_data<F>(
     let connector_enum = api_models::enums::Connector::from_str(connector_name)
         .change_context(errors::ConnectorError::InvalidConnectorName)
         .change_context(errors::ApiErrorResponse::InvalidDataValue {
-            field_name: "connector",
+            field_name: "connector".into(),
         })
         .attach_printable_lazy(|| format!("unable to parse connector name {connector_name:?}"))?;
 
@@ -182,7 +182,7 @@ pub async fn construct_relay_capture_router_data(
     let connector_enum = api_models::enums::Connector::from_str(connector_name)
         .change_context(errors::ConnectorError::InvalidConnectorName)
         .change_context(errors::ApiErrorResponse::InvalidDataValue {
-            field_name: "connector",
+            field_name: "connector".into(),
         })
         .attach_printable_lazy(|| format!("unable to parse connector name {connector_name:?}"))?;
 
@@ -316,7 +316,7 @@ pub async fn construct_relay_incremental_authorization_router_data(
     let connector_enum = api_models::enums::Connector::from_str(connector_name)
         .change_context(errors::ConnectorError::InvalidConnectorName)
         .change_context(errors::ApiErrorResponse::InvalidDataValue {
-            field_name: "connector",
+            field_name: "connector".into(),
         })
         .attach_printable_lazy(|| format!("unable to parse connector name {connector_name:?}"))?;
 
@@ -446,7 +446,7 @@ pub async fn construct_relay_void_router_data(
     let connector_enum = api_models::enums::Connector::from_str(connector_name)
         .change_context(errors::ConnectorError::InvalidConnectorName)
         .change_context(errors::ApiErrorResponse::InvalidDataValue {
-            field_name: "connector",
+            field_name: "connector".into(),
         })
         .attach_printable_lazy(|| format!("unable to parse connector name {connector_name:?}"))?;
 
@@ -574,7 +574,7 @@ pub async fn construct_relay_payments_retrieve_router_data(
     let connector_enum = api_models::enums::Connector::from_str(connector_name)
         .change_context(errors::ConnectorError::InvalidConnectorName)
         .change_context(errors::ApiErrorResponse::InvalidDataValue {
-            field_name: "connector",
+            field_name: "connector".into(),
         })
         .attach_printable_lazy(|| format!("unable to parse connector name {connector_name:?}"))?;
 

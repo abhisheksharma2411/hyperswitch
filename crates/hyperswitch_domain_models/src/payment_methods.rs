@@ -1512,7 +1512,7 @@ impl
             }
             (Some(storage_enums::VaultType::External), None) => {
                 Err(ValidationError::MissingRequiredField {
-                    field_name: "external vault mca id".to_string(),
+                    field_name: "external vault mca id".into(),
                 }
                 .into())
             }

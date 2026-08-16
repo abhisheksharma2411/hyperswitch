@@ -175,7 +175,7 @@ impl CustomerPaymentMethodsFetcher for ModularCustomerPaymentMethodsFetcher {
         let id = customer
             .get_global_id()
             .cloned()
-            .ok_or(errors::ApiErrorResponse::MissingRequiredField { field_name: "id" })?;
+            .ok_or(errors::ApiErrorResponse::MissingRequiredField { field_name: "id".into() })?;
 
         let items = list_customer_payment_methods_from_modular_service(
             state,

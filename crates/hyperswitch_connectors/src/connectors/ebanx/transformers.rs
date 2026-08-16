@@ -230,7 +230,7 @@ impl<F> TryFrom<&EbanxRouterData<&PayoutsRouterData<F>>> for EbanxPayoutFulfillR
                 uid: request
                     .connector_payout_id
                     .to_owned()
-                    .ok_or(ConnectorError::MissingRequiredField { field_name: "uid" })?,
+                    .ok_or(ConnectorError::MissingRequiredField { field_name: "uid".into() })?,
             }),
             PayoutType::Card | PayoutType::Wallet | PayoutType::BankRedirect => {
                 Err(ConnectorError::NotSupported {
@@ -322,7 +322,7 @@ impl<F> TryFrom<&PayoutsRouterData<F>> for EbanxPayoutCancelRequest {
                 uid: request
                     .connector_payout_id
                     .to_owned()
-                    .ok_or(ConnectorError::MissingRequiredField { field_name: "uid" })?,
+                    .ok_or(ConnectorError::MissingRequiredField { field_name: "uid".into() })?,
             }),
             PayoutType::Card | PayoutType::Wallet | PayoutType::BankRedirect => {
                 Err(ConnectorError::NotSupported {
