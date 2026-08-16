@@ -354,7 +354,11 @@ impl CardNetworkTokenizeExecutor<'_, domain::TokenizeCardRequest> {
                 Ok(None)
             } else {
                 Err(report!(errors::ApiErrorResponse::MissingRequiredFields {
-                    field_names: vec!["customer.name".into(), "customer.email".into(), "customer.phone".into()],
+                    field_names: vec![
+                        "customer.name".into(),
+                        "customer.email".into(),
+                        "customer.phone".into()
+                    ],
                 }))
             },
             // If found, send back CustomerDetails from DB

@@ -567,7 +567,9 @@ impl
                 .query_pairs()
                 .find(|(key, _)| key == "code")
                 .map(|(_, value)| value.to_string())
-                .ok_or(errors::ConnectorError::MissingRequiredField { field_name: "code".into() })?;
+                .ok_or(errors::ConnectorError::MissingRequiredField {
+                    field_name: "code".into(),
+                })?;
 
             // Return auth code as "token" with short expiry
             Ok(RouterData {

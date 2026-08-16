@@ -1584,7 +1584,9 @@ pub async fn tokenize_card_using_pm_api(
         pm_data.payment_method_id = pm_id;
     } else {
         return api::log_and_return_error_response(error_stack::report!(
-            errors::ApiErrorResponse::InvalidDataValue { field_name: "card".into() }
+            errors::ApiErrorResponse::InvalidDataValue {
+                field_name: "card".into()
+            }
         ));
     }
 

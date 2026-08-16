@@ -1185,7 +1185,9 @@ impl TryFrom<&PaymentsSyncRouterData> for NovalnetSyncRequest {
                     .change_context(errors::ConnectorError::ResponseDeserializationFailed)?;
 
             let tid = novalnet_redirection_response.tid.ok_or(
-                errors::ConnectorError::MissingConnectorRedirectionPayload { field_name: "tid".into() },
+                errors::ConnectorError::MissingConnectorRedirectionPayload {
+                    field_name: "tid".into(),
+                },
             )?;
 
             NovalnetSyncTransaction { tid }

@@ -427,7 +427,9 @@ pub async fn create_routing_algorithm_under_profile(
     let name = request
         .name
         .get_required_value("name")
-        .change_context(errors::ApiErrorResponse::MissingRequiredField { field_name: "name".into() })
+        .change_context(errors::ApiErrorResponse::MissingRequiredField {
+            field_name: "name".into(),
+        })
         .attach_printable("Name of config not given")?;
 
     let description = request

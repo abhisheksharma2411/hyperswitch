@@ -2182,8 +2182,7 @@ fn get_additional_data(
                 if metadata_capture_delay.is_some() {
                     return Err(errors::ConnectorError::InvalidDataFormat {
                         field_name:
-                            "metadata.capture_delay_hours should be None for manual capture"
-                                .into(),
+                            "metadata.capture_delay_hours should be None for manual capture".into(),
                     }
                     .into());
                 }

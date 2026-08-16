@@ -1,5 +1,4 @@
-use std::borrow::Cow;
-use std::str::FromStr;
+use std::{borrow::Cow, str::FromStr};
 
 use common_enums::AttemptStatus;
 use common_types::primitive_wrappers::{ExtendedAuthorizationAppliedBool, OvercaptureEnabledBool};
@@ -1409,9 +1408,9 @@ impl UnifiedConnectorServiceError {
             })
             .ok()?;
 
-        let error_code: UcsErrorCode = serde_json::from_value(
-            serde_json::Value::String(integration_error.error_code.clone()),
-        )
+        let error_code: UcsErrorCode = serde_json::from_value(serde_json::Value::String(
+            integration_error.error_code.clone(),
+        ))
         .unwrap_or(UcsErrorCode::Unknown);
 
         error_code.into_ucs_error(&integration_error.error_message)
@@ -1501,41 +1500,107 @@ impl UcsErrorCode {
     /// Order matters — more specific prefixes first. Only covers variants with distinctive
     /// message patterns; the proto path handles everything.
     const PLAIN_TEXT_MAPPINGS: &[(&str, Self)] = &[
-        (UCS_PREFIX_MISSING_REQUIRED_FIELDS, Self::MissingRequiredFields),
-        (UCS_PREFIX_MISSING_REQUIRED_FIELD, Self::MissingRequiredField),
+        (
+            UCS_PREFIX_MISSING_REQUIRED_FIELDS,
+            Self::MissingRequiredFields,
+        ),
+        (
+            UCS_PREFIX_MISSING_REQUIRED_FIELD,
+            Self::MissingRequiredField,
+        ),
         (UCS_PREFIX_INVALID_DATA_FORMAT, Self::InvalidDataFormat),
         (UCS_PREFIX_NOT_IMPLEMENTED, Self::NotImplemented),
-        (UCS_PREFIX_INVALID_CONNECTOR_CONFIG, Self::InvalidConnectorConfig),
+        (
+            UCS_PREFIX_INVALID_CONNECTOR_CONFIG,
+            Self::InvalidConnectorConfig,
+        ),
         (UCS_PREFIX_INVALID_WALLET_TOKEN, Self::InvalidWalletToken),
-        (UCS_PREFIX_MISSING_RELATED_TXN_ID, Self::MissingConnectorRelatedTransactionId),
+        (
+            UCS_PREFIX_MISSING_RELATED_TXN_ID,
+            Self::MissingConnectorRelatedTransactionId,
+        ),
         (UCS_PREFIX_FIELD_TOO_LONG, Self::MaxFieldLengthViolated),
-        (UCS_PREFIX_MANDATE_MISMATCH, Self::MandatePaymentDataMismatch),
-        (UCS_PREFIX_CURRENCY_NOT_SUPPORTED, Self::CurrencyNotSupported),
+        (
+            UCS_PREFIX_MANDATE_MISMATCH,
+            Self::MandatePaymentDataMismatch,
+        ),
+        (
+            UCS_PREFIX_CURRENCY_NOT_SUPPORTED,
+            Self::CurrencyNotSupported,
+        ),
         (UCS_PREFIX_NOT_SUPPORTED, Self::NotSupported),
         (UCS_PREFIX_FLOW_NOT_SUPPORTED, Self::FlowNotSupported),
     ];
 
     /// Exact message matches for variants that use a fixed error string.
     const EXACT_MATCHES: &[(&str, Self)] = &[
-        ("Failed to obtain authentication type", Self::FailedToObtainAuthType),
-        ("Failed to encode connector request", Self::RequestEncodingFailed),
-        ("Error while obtaining URL for the integration", Self::FailedToObtainIntegrationUrl),
-        ("Header map construction failed", Self::HeaderMapConstructionFailed),
-        ("Request body serialization failed", Self::BodySerializationFailed),
+        (
+            "Failed to obtain authentication type",
+            Self::FailedToObtainAuthType,
+        ),
+        (
+            "Failed to encode connector request",
+            Self::RequestEncodingFailed,
+        ),
+        (
+            "Error while obtaining URL for the integration",
+            Self::FailedToObtainIntegrationUrl,
+        ),
+        (
+            "Header map construction failed",
+            Self::HeaderMapConstructionFailed,
+        ),
+        (
+            "Request body serialization failed",
+            Self::BodySerializationFailed,
+        ),
         ("Url parsing failed", Self::UrlParsingFailed),
-        ("URL encoding of request payload failed", Self::UrlEncodingFailed),
+        (
+            "URL encoding of request payload failed",
+            Self::UrlEncodingFailed,
+        ),
         ("Connector metadata not found", Self::NoConnectorMetaData),
         ("An invalid wallet was used", Self::InvalidWallet),
-        ("Payment Method Type not found", Self::MissingPaymentMethodType),
-        ("Payment method data / type / experience mismatch", Self::MismatchedPaymentData),
-        ("Missing apple pay tokenization data", Self::MissingApplePayTokenData),
-        ("Capture method not supported", Self::CaptureMethodNotSupported),
-        ("Failed to convert amount to required type", Self::AmountConversionFailed),
-        ("Missing connector transaction ID", Self::MissingConnectorTransactionId),
-        ("Missing connector refund ID", Self::MissingConnectorRefundId),
-        ("Missing connector mandate ID", Self::MissingConnectorMandateId),
-        ("Missing connector mandate metadata", Self::MissingConnectorMandateMetadata),
-        ("Failed to verify request source (signature, webhook, etc.)", Self::SourceVerificationFailed),
+        (
+            "Payment Method Type not found",
+            Self::MissingPaymentMethodType,
+        ),
+        (
+            "Payment method data / type / experience mismatch",
+            Self::MismatchedPaymentData,
+        ),
+        (
+            "Missing apple pay tokenization data",
+            Self::MissingApplePayTokenData,
+        ),
+        (
+            "Capture method not supported",
+            Self::CaptureMethodNotSupported,
+        ),
+        (
+            "Failed to convert amount to required type",
+            Self::AmountConversionFailed,
+        ),
+        (
+            "Missing connector transaction ID",
+            Self::MissingConnectorTransactionId,
+        ),
+        (
+            "Missing connector refund ID",
+            Self::MissingConnectorRefundId,
+        ),
+        (
+            "Missing connector mandate ID",
+            Self::MissingConnectorMandateId,
+        ),
+        (
+            "Missing connector mandate metadata",
+            Self::MissingConnectorMandateMetadata,
+        ),
+        (
+            "Failed to verify request source (signature, webhook, etc.)",
+            Self::SourceVerificationFailed,
+        ),
     ];
 
     /// Strips the known prefix from the message to extract the payload (e.g. field name).
@@ -1627,9 +1692,9 @@ impl UcsErrorCode {
             }),
             Self::CaptureMethodNotSupported => Some(E::CaptureMethodNotSupported),
             // --- Configuration / precondition ---
-            Self::InvalidConnectorConfig | Self::ConfigurationError => {
-                Some(E::RequestEncodingFailedWithReason(error_message.to_string()))
-            }
+            Self::InvalidConnectorConfig | Self::ConfigurationError => Some(
+                E::RequestEncodingFailedWithReason(error_message.to_string()),
+            ),
             Self::NoConnectorMetaData => Some(E::NoConnectorMetaData),
             // --- Auth ---
             Self::FailedToObtainAuthType => Some(E::FailedToObtainAuthType),
@@ -1734,9 +1799,9 @@ impl ErrorSwitch<ConnectorError> for UnifiedConnectorServiceError {
             | Self::RequestEncodingFailedWithReason(_)
             | Self::InvalidDataFormat { .. } => ConnectorError::RequestEncodingFailed,
             // Missing field errors
-            Self::MissingRequiredField { field_name } => {
-                ConnectorError::MissingRequiredField { field_name: field_name.clone() }
-            }
+            Self::MissingRequiredField { field_name } => ConnectorError::MissingRequiredField {
+                field_name: field_name.clone(),
+            },
             Self::MissingRequiredFields { field_names } => ConnectorError::MissingRequiredFields {
                 field_names: field_names.clone(),
             },
@@ -1772,22 +1837,18 @@ impl ErrorSwitch<ConnectorError> for UnifiedConnectorServiceError {
             Self::MissingConnectorTransactionID => ConnectorError::MissingConnectorTransactionID,
             Self::MissingConnectorRefundID => ConnectorError::MissingConnectorRefundID,
             Self::MissingConnectorMandateID => ConnectorError::MissingConnectorMandateID,
-            Self::MissingConnectorMandateMetadata => ConnectorError::MissingConnectorMandateMetadata,
+            Self::MissingConnectorMandateMetadata => {
+                ConnectorError::MissingConnectorMandateMetadata
+            }
             Self::MissingConnectorRelatedTransactionID { id } => {
                 ConnectorError::MissingConnectorRelatedTransactionID { id: id.clone() }
             }
-            Self::MaxFieldLengthViolated { field_name } => {
-                ConnectorError::InvalidDataFormat {
-                    field_name: Cow::Owned(field_name.clone()),
-                }
-            }
+            Self::MaxFieldLengthViolated { field_name } => ConnectorError::InvalidDataFormat {
+                field_name: Cow::Owned(field_name.clone()),
+            },
             // Not supported / flow not supported
-            Self::NotSupported { message } => {
-                ConnectorError::NotImplemented(message.clone())
-            }
-            Self::FlowNotSupported { flow } => {
-                ConnectorError::NotImplemented(flow.clone())
-            }
+            Self::NotSupported { message } => ConnectorError::NotImplemented(message.clone()),
+            Self::FlowNotSupported { flow } => ConnectorError::NotImplemented(flow.clone()),
             Self::CaptureMethodNotSupported => ConnectorError::CaptureMethodNotSupported,
             // Configuration / metadata errors
             Self::NoConnectorMetaData => ConnectorError::NoConnectorMetaData,

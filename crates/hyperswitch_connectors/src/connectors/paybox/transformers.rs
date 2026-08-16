@@ -450,7 +450,8 @@ impl TryFrom<&PayboxRouterData<&types::PaymentsAuthorizeRouterData>> for PayboxP
                                     .clone()
                                     .ok_or_else(|| {
                                         errors::ConnectorError::MissingRequiredField {
-                                            field_name: "connector_mandate_request_reference_id".into(),
+                                            field_name: "connector_mandate_request_reference_id"
+                                                .into(),
                                         }
                                     })?;
                                 Some(Secret::new(reference_id))

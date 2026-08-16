@@ -82,7 +82,8 @@ impl TryFrom<&ItaubankRouterData<&types::PaymentsAuthorizeRouterData>> for Itaub
                                 nome,
                             },
                             _ => Err(errors::ConnectorError::MissingRequiredField {
-                                field_name: "cpf and cnpj both missing in payment_method_data".into(),
+                                field_name: "cpf and cnpj both missing in payment_method_data"
+                                    .into(),
                             })?,
                         };
                         Ok(Self {

@@ -764,7 +764,9 @@ impl TryFrom<&DeutschebankRouterData<&PaymentsCompleteAuthorizeRouterData>>
                 .get("cres")
                 .and_then(|v| v.as_str())
                 .map(String::from)
-                .ok_or(errors::ConnectorError::MissingRequiredField { field_name: "cres".into() })?;
+                .ok_or(errors::ConnectorError::MissingRequiredField {
+                    field_name: "cres".into(),
+                })?;
 
             Ok(Self::DeutschebankThreeDSCompleteAuthorizeRequest(
                 DeutschebankThreeDSCompleteAuthorizeRequest { cres },

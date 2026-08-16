@@ -1413,7 +1413,8 @@ impl TryFrom<&PaymentsAuthorizeRouterData> for PaysafeMandateData {
                             .get_payment_method_token()
                     })
                     .ok_or(errors::ConnectorError::MissingRequiredField {
-                        field_name: "payment_token (preprocessing_id or payment_method_token)".into(),
+                        field_name: "payment_token (preprocessing_id or payment_method_token)"
+                            .into(),
                     })?,
             }),
             (false, Some(mandate_data)) => {
@@ -1447,7 +1448,8 @@ impl TryFrom<&PaymentsAuthorizeRouterData> for PaysafeMandateData {
                             .get_payment_method_token()
                     })
                     .ok_or(errors::ConnectorError::MissingRequiredField {
-                        field_name: "payment_token (preprocessing_id or payment_method_token)".into(),
+                        field_name: "payment_token (preprocessing_id or payment_method_token)"
+                            .into(),
                     })?,
             }),
         }

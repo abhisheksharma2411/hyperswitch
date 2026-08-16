@@ -6841,7 +6841,8 @@ pub fn get_mandate_details(
             | Some(mandates::MandateDataType::MultiUse(Some(mandate))) => Ok(mandate.clone()),
             Some(mandates::MandateDataType::MultiUse(None)) => {
                 Err(errors::ConnectorError::MissingRequiredField {
-                    field_name: "setup_future_usage.mandate_data.mandate_type.multi_use.amount".into(),
+                    field_name: "setup_future_usage.mandate_data.mandate_type.multi_use.amount"
+                        .into(),
                 }
                 .into())
             }

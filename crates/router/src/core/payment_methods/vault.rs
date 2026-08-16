@@ -1281,7 +1281,9 @@ impl Vaultable for api::BankTransferPayout {
             Some(PaymentMethodType::Sepa) => Self::Sepa(payouts::SepaBankTransfer {
                 iban: bank_sensitive_data
                     .iban
-                    .ok_or(errors::VaultError::MissingRequiredField { field_name: "iban".into() })?,
+                    .ok_or(errors::VaultError::MissingRequiredField {
+                        field_name: "iban".into(),
+                    })?,
                 bic: bank_sensitive_data.bic,
                 bank_name: bank_insensitive_data.bank_name,
                 bank_country_code: bank_insensitive_data.bank_country_code,
@@ -1312,12 +1314,16 @@ impl Vaultable for api::BankTransferPayout {
             Some(PaymentMethodType::PixEmv) => Self::PixEmv(payouts::PixEmvBankTransfer {
                 emv: bank_sensitive_data
                     .emv
-                    .ok_or(errors::VaultError::MissingRequiredField { field_name: "emv".into() })?,
+                    .ok_or(errors::VaultError::MissingRequiredField {
+                        field_name: "emv".into(),
+                    })?,
             }),
             Some(PaymentMethodType::OpenBanking) => Self::OpenBanking(payouts::OpenBanking {
                 iban: bank_sensitive_data
                     .iban
-                    .ok_or(errors::VaultError::MissingRequiredField { field_name: "iban".into() })?,
+                    .ok_or(errors::VaultError::MissingRequiredField {
+                        field_name: "iban".into(),
+                    })?,
                 account_holder_name: bank_sensitive_data.account_holder_name.ok_or(
                     errors::VaultError::MissingRequiredField {
                         field_name: "account_holder_name".into(),
