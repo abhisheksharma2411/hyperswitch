@@ -33,7 +33,6 @@ fn exceeds_threshold(count: u64, threshold: u64) -> bool {
     count >= threshold
 }
 
-
 /// Redis key holding the failure counter for a scope.
 fn counter_key(rollout_scope: &str) -> String {
     format!("{}_{rollout_scope}", consts::UCS_KILL_SWITCH_REDIS_PREFIX)
