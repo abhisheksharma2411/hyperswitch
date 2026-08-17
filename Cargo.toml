@@ -50,3 +50,6 @@ option_map_unit_fn = "allow"
 strip = true
 lto = true
 codegen-units = 1
+
+[profile.dev]
+debug = false

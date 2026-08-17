@@ -846,6 +846,13 @@ impl Action {
                 Ok(())
             }
             Self::TerminalFailure(payment_attempt) => {
+                super::cluster_stats::record_outcome_from_attempt(
+                    state,
+                    payment_attempt,
+                    revenue_recovery_metadata,
+                    false,
+                )
+                .await;
                 db.as_scheduler()
                     .finish_process_with_business_status(
                         execute_task_process.clone(),
@@ -858,6 +865,13 @@ impl Action {
                 Ok(())
             }
             Self::SuccessfulPayment(payment_attempt) => {
+                super::cluster_stats::record_outcome_from_attempt(
+                    state,
+                    payment_attempt,
+                    revenue_recovery_metadata,
+                    true,
+                )
+                .await;
                 db.as_scheduler()
                     .finish_process_with_business_status(
                         execute_task_process.clone(),
@@ -1121,6 +1135,13 @@ impl Action {
             Self::TerminalFailure(payment_attempt) => {
                 // TODO: Add support for retrying failed outgoing recordback webhooks
                 // finish the current psync task
+                super::cluster_stats::record_outcome_from_attempt(
+                    state,
+                    payment_attempt,
+                    revenue_recovery_metadata,
+                    false,
+                )
+                .await;
                 db.as_scheduler()
                     .finish_process_with_business_status(
                         psync_task_process.clone(),
@@ -1133,6 +1154,13 @@ impl Action {
             }
             Self::SuccessfulPayment(payment_attempt) => {
                 // finish the current psync task
+                super::cluster_stats::record_outcome_from_attempt(
+                    state,
+                    payment_attempt,
+                    revenue_recovery_metadata,
+                    true,
+                )
+                .await;
                 db.as_scheduler()
                     .finish_process_with_business_status(
                         psync_task_process.clone(),

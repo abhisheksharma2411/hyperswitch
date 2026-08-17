@@ -1,4 +1,5 @@
 pub mod api;
+pub mod cluster_stats;
 pub mod transformers;
 pub mod types;
 use std::marker::PhantomData;

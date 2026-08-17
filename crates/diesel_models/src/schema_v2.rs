@@ -471,6 +471,24 @@ diesel::table! {
 
 diesel::table! {
     use diesel::sql_types::*;
+
+    cluster_stats (cluster_key) {
+        cluster_key -> Text,
+        statistics -> Jsonb,
+    }
+}
+
+diesel::table! {
+    use diesel::sql_types::*;
+
+    cluster_stats (cluster_key) {
+        cluster_key -> Text,
+        statistics -> Jsonb,
+    }
+}
+
+diesel::table! {
+    use diesel::sql_types::*;
     use crate::enums::diesel_exports::*;
 
     customers (id) {
@@ -1957,6 +1975,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     captures,
     card_issuers,
     cards_info,
+    cluster_stats,
     configs,
     customers,
     dashboard_metadata,

@@ -90,6 +90,8 @@ pub struct RevenueRecoverySettings {
     pub recovery_timestamp: RecoveryTimestamp,
     pub card_config: RetryLimitsConfig,
     pub redis_ttl_in_seconds: i64,
+    #[serde(default)]
+    pub enable_retry_stats_logging: bool,
 }
 
 #[derive(Debug, serde::Deserialize, Clone)]
