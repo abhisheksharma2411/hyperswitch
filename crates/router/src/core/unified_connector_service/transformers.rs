@@ -4979,6 +4979,7 @@ impl ForeignFrom<common_enums::PaymentMethodType> for payments_grpc::PaymentMeth
             common_enums::PaymentMethodType::Momo => Self::Momo,
             common_enums::PaymentMethodType::MomoAtm => Self::MomoAtm,
             common_enums::PaymentMethodType::Multibanco => Self::Multibanco,
+            common_enums::PaymentMethodType::OpenBanking => Self::OpenBanking,
             common_enums::PaymentMethodType::OnlineBankingThailand => Self::OnlineBankingThailand,
             common_enums::PaymentMethodType::OnlineBankingCzechRepublic => {
                 Self::OnlineBankingCzechRepublic
@@ -7878,6 +7879,7 @@ impl transformers::ForeignTryFrom<&api_models::payouts::Passthrough>
         Ok(Self {
             psp_token: item.psp_token.clone().expose(),
             token_type: payments_grpc::PaymentMethodType::foreign_from(item.token_type).into(),
+            psp_customer_id: item.psp_customer_id.clone(),
         })
     }
 }
